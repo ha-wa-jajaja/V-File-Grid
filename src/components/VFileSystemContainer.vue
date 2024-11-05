@@ -1,58 +1,106 @@
 <!-- https://vuejs.org/guide/components/slots.html#scoped-slots -->
 <script setup lang="ts">
-import { ref, provide } from 'vue'
+import { onMounted, provide, ref } from 'vue'
 import type { VFsContainerProvides } from '@/types/types'
+import { useVFsSelection } from '@/composables/useVFsSelection'
+import { useVFsGhostSelector } from '@/composables/useVFsGhostSelector'
 
-const allIds = ref<string[]>([])
-const selectedIds = ref<Set<string>>(new Set())
+const props = defineProps<{
+  allIds: string[]
+  itemClassName: string
+  ghostSelectorBg: string
+  containerClassName?: string
+}>()
 
-function updateSelectedIds(
-  action: 'clear' | 'select' | 'delete' | 'append' | 'add-multi',
-  id?: string,
-) {
-  if (action === 'clear') selectedIds.value.clear()
-  else {
-    if (!id) throw new Error('Missing ID')
-    if (action === 'append') {
-      selectedIds.value.add(id)
+const { vFsSelectedIds, updateVFsSelectedIds } = useVFsSelection(props.allIds)
+provide<VFsContainerProvides>('selection', {
+  selectedIds: vFsSelectedIds,
+  updateSelectedIds: updateVFsSelectedIds,
+})
+
+const vFsGhostSelEl = ref<HTMLElement | null>(null)
+const {
+  isDoingVfsGhostSelect,
+  vFsGhostSelectDim,
+  toggleVFsGhostSelect,
+  updateVFsGhostSelectFrame,
+} = useVFsGhostSelector(
+  vFsSelectedIds,
+  props.allIds,
+  vFsGhostSelEl,
+  props.itemClassName,
+)
+
+const {
+  ghostSelectInitX,
+  ghostSelectInitY,
+  ghostSelectPosX,
+  ghostSelectPosY,
+  ghostSelectWidth,
+  ghostSelectHeight,
+} = vFsGhostSelectDim
+
+function setVfsClearClickAction() {
+  window.addEventListener('click', e => {
+    if (isDoingVfsGhostSelect.value) {
+      isDoingVfsGhostSelect.value = false
       return
     }
-    if (action === 'add-multi') {
-      const selectedItemIndexes = Array.from(selectedIds.value).map(id =>
-        allIds.value.findIndex(i => i === id),
-      )
-      const currItemIdx = allIds.value.findIndex(i => i === id)
-      const firstItemIdx = Math.min(...selectedItemIndexes)
-      const lastItemIdx = Math.max(...selectedItemIndexes)
 
-      if ([firstItemIdx, lastItemIdx, currItemIdx].some(n => n < 0))
-        throw new Error('Id not found in material list')
-
-      let itemsToAdd
-
-      if (currItemIdx < firstItemIdx) {
-        itemsToAdd = allIds.value.slice(currItemIdx, lastItemIdx)
-      } else {
-        const startIdx =
-          currItemIdx < lastItemIdx ? currItemIdx : lastItemIdx + 1
-        const endIdx = currItemIdx < lastItemIdx ? lastItemIdx : currItemIdx + 1
-
-        itemsToAdd = allIds.value.slice(startIdx, endIdx)
-      }
-      itemsToAdd.forEach(i => selectedIds.value.add(i))
+    const typedEvent = e as unknown as {
+      target: { classList: { contains: (arg: string) => boolean } }
     }
-    if (action === 'select') {
-      selectedIds.value.clear()
-      selectedIds.value.add(id)
+    if (!e.target || !typedEvent.target.classList) return
+    if (!typedEvent.target.classList.contains('material-image')) {
+      updateVFsSelectedIds('clear')
     }
-    if (action === 'delete') {
-      if (selectedIds.value.has(id)) selectedIds.value.delete(id)
-    }
-  }
+  })
 }
 
-provide<VFsContainerProvides>('selection', {
-  selectedIds,
-  updateSelectedIds,
+onMounted(() => {
+  setVfsClearClickAction()
 })
 </script>
+
+<template>
+  <section
+    class="v-file-system-container"
+    :class="props.containerClassName"
+    @mousedown="toggleVFsGhostSelect(true, $event)"
+    @mouseup="toggleVFsGhostSelect(false, $event)"
+    @mousemove="
+      updateVFsGhostSelectFrame(
+        $event.pageX,
+        $event.pageY,
+        ghostSelectInitX,
+        ghostSelectInitY,
+      )
+    "
+  >
+    <div
+      ref="vFsGhostSelEl"
+      class="v-file-system-container__ghost-selector"
+      :style="{
+        top: `${ghostSelectPosY}px`,
+        left: `${ghostSelectPosX}px`,
+        width: `${ghostSelectWidth}px`,
+        height: `${ghostSelectHeight}px`,
+        '--ghost-sel-bg': props.ghostSelectorBg,
+      }"
+    ></div>
+
+    <slot />
+  </section>
+</template>
+
+<style scoped>
+.v-file-system-container {
+  width: 100%;
+}
+
+.v-file-system-container__ghost-selector {
+  position: fixed;
+  background-color: var('--ghost-sel-bg');
+  z-index: 9999;
+}
+</style>

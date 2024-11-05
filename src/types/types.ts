@@ -4,8 +4,6 @@ export type VFsContainerProps = {
   id: string
 }
 
-// export type VFsContainerUpdater =
-
 export type VFsContainerProvides = {
   selectedIds: Ref<Set<string>>
   updateSelectedIds: (
