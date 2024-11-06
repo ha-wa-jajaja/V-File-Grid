@@ -4,10 +4,16 @@ export type VFsContainerProps = {
   id: string
 }
 
+export type VFsContainerUpdateSelectedIds = (
+  action: 'clear' | 'select' | 'delete' | 'append' | 'add-multi',
+  id?: string,
+) => void
+
+export type VFsScrollerYSetter = (val: number) => void
+
 export type VFsContainerProvides = {
   selectedIds: Ref<Set<string>>
-  updateSelectedIds: (
-    action: 'clear' | 'select' | 'delete' | 'append' | 'add-multi',
-    id?: string,
-  ) => void
+  multiItemsBoard: Ref<HTMLElement | null>
+  updateSelectedIds: VFsContainerUpdateSelectedIds
+  updateScrollerY: VFsScrollerYSetter
 }

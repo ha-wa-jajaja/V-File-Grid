@@ -12,24 +12,33 @@ const props = defineProps<{
   containerClassName?: string
 }>()
 
+const emits = defineEmits(['updateScrollerY'])
+
+const multiItemsBoard = ref<HTMLElement | null>(null)
+
 const { vFsSelectedIds, updateVFsSelectedIds } = useVFsSelection(props.allIds)
 provide<VFsContainerProvides>('selection', {
   selectedIds: vFsSelectedIds,
   updateSelectedIds: updateVFsSelectedIds,
+  multiItemsBoard,
+  updateScrollerY: (val: number) => {
+    emits('updateScrollerY', val)
+  },
 })
 
 const vFsGhostSelEl = ref<HTMLElement | null>(null)
+
 const {
   isDoingVfsGhostSelect,
   vFsGhostSelectDim,
   toggleVFsGhostSelect,
   updateVFsGhostSelectFrame,
-} = useVFsGhostSelector(
-  vFsSelectedIds,
-  props.allIds,
-  vFsGhostSelEl,
-  props.itemClassName,
-)
+} = useVFsGhostSelector({
+  selectedIds: vFsSelectedIds,
+  allIds: props.allIds,
+  ghostSelectEl: vFsGhostSelEl,
+  vFsItemClassName: props.itemClassName,
+})
 
 const {
   ghostSelectInitX,
@@ -89,7 +98,15 @@ onMounted(() => {
       }"
     ></div>
 
-    <slot />
+    <slot name="items" />
+
+    <!-- TODO: Backboard slot -->
+    <div
+      class="v-file-system-container__multi-items-board"
+      ref="multiItemsBoard"
+    >
+      <slot name="multiItemsBoard" />
+    </div>
   </section>
 </template>
 
@@ -102,5 +119,12 @@ onMounted(() => {
   position: fixed;
   background-color: var('--ghost-sel-bg');
   z-index: 9999;
+}
+
+.v-file-system-container__multi-items-board {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
 }
 </style>

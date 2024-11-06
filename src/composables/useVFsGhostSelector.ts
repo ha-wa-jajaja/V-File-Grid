@@ -1,12 +1,19 @@
-import type { Ref } from 'vue'
 import { ref } from 'vue'
+import type { Ref } from 'vue'
 
-export const useVFsGhostSelector = (
-  selectedIds: Ref<Set<string>>,
-  allIds: string[],
-  ghostSelectEl: Ref<HTMLElement | null>,
-  vFsItemClassName: string,
-) => {
+export type useVFsGhostSelectorProps = {
+  selectedIds: Ref<Set<string>>
+  allIds: string[]
+  ghostSelectEl: Ref<HTMLElement | null>
+  vFsItemClassName: string
+}
+
+export const useVFsGhostSelector = ({
+  selectedIds,
+  allIds,
+  ghostSelectEl,
+  vFsItemClassName,
+}: useVFsGhostSelectorProps) => {
   const isDoingVfsGhostSelect = ref(false)
   const ghostSelectInitX = ref(0)
   const ghostSelectInitY = ref(0)
