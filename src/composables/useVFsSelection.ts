@@ -1,21 +1,22 @@
-import { ref } from 'vue'
+import type { ModelRef } from 'vue'
 
-export const useVFsSelection = (allIds: string[]) => {
-  const vFsSelectedIds = ref<Set<string>>(new Set())
-
-  function updateVFsSelectedIds(
+export const useVFsSelection = (
+  selectedIdModel: ModelRef<Set<string>>,
+  allIds: string[],
+) => {
+  function updateSelectedIdModel(
     action: 'clear' | 'select' | 'delete' | 'append' | 'add-multi',
     id?: string,
   ) {
-    if (action === 'clear') vFsSelectedIds.value.clear()
+    if (action === 'clear') selectedIdModel.value.clear()
     else {
       if (!id) throw new Error('Missing ID')
       if (action === 'append') {
-        vFsSelectedIds.value.add(id)
+        selectedIdModel.value.add(id)
         return
       }
       if (action === 'add-multi') {
-        const selectedItemIndexes = Array.from(vFsSelectedIds.value).map(id =>
+        const selectedItemIndexes = Array.from(selectedIdModel.value).map(id =>
           allIds.findIndex(i => i === id),
         )
         const currItemIdx = allIds.findIndex(i => i === id)
@@ -37,17 +38,17 @@ export const useVFsSelection = (allIds: string[]) => {
 
           itemsToAdd = allIds.slice(startIdx, endIdx)
         }
-        itemsToAdd.forEach(i => vFsSelectedIds.value.add(i))
+        itemsToAdd.forEach(i => selectedIdModel.value.add(i))
       }
       if (action === 'select') {
-        vFsSelectedIds.value.clear()
-        vFsSelectedIds.value.add(id)
+        selectedIdModel.value.clear()
+        selectedIdModel.value.add(id)
       }
       if (action === 'delete') {
-        if (vFsSelectedIds.value.has(id)) vFsSelectedIds.value.delete(id)
+        if (selectedIdModel.value.has(id)) selectedIdModel.value.delete(id)
       }
     }
   }
 
-  return { vFsSelectedIds, updateVFsSelectedIds }
+  return { updateSelectedIdModel }
 }

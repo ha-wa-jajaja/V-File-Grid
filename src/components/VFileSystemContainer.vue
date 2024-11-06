@@ -1,25 +1,40 @@
 <!-- https://vuejs.org/guide/components/slots.html#scoped-slots -->
 <script setup lang="ts">
-import { onMounted, provide, ref } from 'vue'
+import { computed, onMounted, provide, ref, defineModel } from 'vue'
 import type { VFsContainerProvides } from '@/types/types'
 import { useVFsSelection } from '@/composables/useVFsSelection'
 import { useVFsGhostSelector } from '@/composables/useVFsGhostSelector'
 
-const props = defineProps<{
-  allIds: string[]
-  itemClassName: string
-  ghostSelectorBg: string
-  containerClassName?: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    allIds: string[]
+    itemClassName: string
+    ghostSelectorBg: string
+    containerClassName?: string
+    cols?: number
+    gap?: string | number
+  }>(),
+  {
+    cols: 6,
+    gap: 24,
+  },
+)
+
+const gapValue = computed(() => {
+  if (typeof props.gap === 'number') return `${props.gap}px`
+  return props.gap
+})
 
 const emits = defineEmits(['updateScrollerY'])
 
 const multiItemsBoard = ref<HTMLElement | null>(null)
 
-const { vFsSelectedIds, updateVFsSelectedIds } = useVFsSelection(props.allIds)
+const selectedIdModel = defineModel<Set<string>>()
+
+const { updateSelectedIdModel } = useVFsSelection(selectedIdModel, props.allIds)
 provide<VFsContainerProvides>('selection', {
-  selectedIds: vFsSelectedIds,
-  updateSelectedIds: updateVFsSelectedIds,
+  selectedIds: selectedIdModel,
+  updateSelectedIds: updateSelectedIdModel,
   multiItemsBoard,
   updateScrollerY: (val: number) => {
     emits('updateScrollerY', val)
@@ -34,7 +49,7 @@ const {
   toggleVFsGhostSelect,
   updateVFsGhostSelectFrame,
 } = useVFsGhostSelector({
-  selectedIds: vFsSelectedIds,
+  selectedIds: selectedIdModel,
   allIds: props.allIds,
   ghostSelectEl: vFsGhostSelEl,
   vFsItemClassName: props.itemClassName,
@@ -49,26 +64,26 @@ const {
   ghostSelectHeight,
 } = vFsGhostSelectDim
 
-function setVfsClearClickAction() {
-  window.addEventListener('click', e => {
-    if (isDoingVfsGhostSelect.value) {
-      isDoingVfsGhostSelect.value = false
-      return
-    }
+// function setVfsClearClickAction() {
+//   window.addEventListener('click', e => {
+//     if (isDoingVfsGhostSelect.value) {
+//       isDoingVfsGhostSelect.value = false
+//       return
+//     }
 
-    const typedEvent = e as unknown as {
-      target: { classList: { contains: (arg: string) => boolean } }
-    }
-    if (!e.target || !typedEvent.target.classList) return
-    if (!typedEvent.target.classList.contains('material-image')) {
-      updateVFsSelectedIds('clear')
-    }
-  })
-}
+//     const typedEvent = e as unknown as {
+//       target: { classList: { contains: (arg: string) => boolean } }
+//     }
+//     if (!e.target || !typedEvent.target.classList) return
+//     if (!typedEvent.target.classList.contains('material-image')) {
+//       updateSelectedIdModel('clear')
+//     }
+//   })
+// }
 
-onMounted(() => {
-  setVfsClearClickAction()
-})
+// onMounted(() => {
+//   setVfsClearClickAction()
+// })
 </script>
 
 <template>
@@ -98,7 +113,15 @@ onMounted(() => {
       }"
     ></div>
 
-    <slot name="items" />
+    <div
+      class="v-file-system__items"
+      :style="{
+        '--v-items-grid-cols': props.cols,
+        '--v-items-grid-gap': gapValue,
+      }"
+    >
+      <slot name="items" />
+    </div>
 
     <!-- TODO: Backboard slot -->
     <div
@@ -113,11 +136,14 @@ onMounted(() => {
 <style scoped>
 .v-file-system-container {
   width: 100%;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 .v-file-system-container__ghost-selector {
   position: fixed;
-  background-color: var('--ghost-sel-bg');
+  background-color: var(--ghost-sel-bg);
   z-index: 9999;
 }
 
@@ -126,5 +152,11 @@ onMounted(() => {
   z-index: -1;
   top: 0;
   left: 0;
+}
+
+.v-file-system__items {
+  display: grid;
+  grid-template-columns: repeat(var(--v-items-grid-cols), minmax(0, 1fr));
+  gap: var(--v-items-grid-gap);
 }
 </style>

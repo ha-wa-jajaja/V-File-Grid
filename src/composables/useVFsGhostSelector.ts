@@ -1,8 +1,8 @@
 import { ref } from 'vue'
-import type { Ref } from 'vue'
+import type { Ref, ModelRef } from 'vue'
 
 export type useVFsGhostSelectorProps = {
-  selectedIds: Ref<Set<string>>
+  selectedIds: ModelRef<Set<string>>
   allIds: string[]
   ghostSelectEl: Ref<HTMLElement | null>
   vFsItemClassName: string
@@ -31,6 +31,8 @@ export const useVFsGhostSelector = ({
       ghostSelectPosX.value = e.pageX
       ghostSelectPosY.value = e.pageY
     } else {
+      isDoingVfsGhostSelect.value = false
+
       ghostSelectPosX.value = 0
       ghostSelectPosY.value = 0
       ghostSelectWidth.value = 0
@@ -62,12 +64,14 @@ export const useVFsGhostSelector = ({
       ghostSelectPosY.value = y
     }
 
-    const vFsItems = document.querySelectorAll(vFsItemClassName)
+    const vFsItems = document.querySelectorAll('.' + vFsItemClassName)
+
     Array.from(vFsItems).forEach((item, index) => {
       if (!item) return
 
       const collided =
         ghostSelectEl.value && doCheckItemCollide(ghostSelectEl.value, item)
+
       const itemId = allIds.at(index)
       if (!itemId) throw new Error('Item id is not found')
 

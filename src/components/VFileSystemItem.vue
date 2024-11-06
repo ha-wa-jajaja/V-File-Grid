@@ -46,6 +46,7 @@ watch(isDragging, v => {
 
 <template>
   <div
+    draggable="true"
     @mousedown="onVFsItemMouseDown"
     @click="onVFsItemClick"
     @dragstart="onDragStart"
