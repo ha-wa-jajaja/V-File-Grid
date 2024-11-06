@@ -84,6 +84,9 @@ const {
 // onMounted(() => {
 //   setVfsClearClickAction()
 // })
+
+// FIXME: Type problems
+// FIXME: Click outside
 </script>
 
 <template>
