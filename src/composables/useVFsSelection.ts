@@ -1,13 +1,16 @@
-import type { ModelRef } from 'vue'
+import type { SelectedIdsModel } from '@/types/types'
 
 export const useVFsSelection = (
-  selectedIdModel: ModelRef<Set<string>>,
+  selectedIdModel: SelectedIdsModel,
   allIds: string[],
 ) => {
   function updateSelectedIdModel(
     action: 'clear' | 'select' | 'delete' | 'append' | 'add-multi',
     id?: string,
   ) {
+    if (!selectedIdModel.value) {
+      throw new Error('SelectedIdsModel is not defined')
+    }
     if (action === 'clear') selectedIdModel.value.clear()
     else {
       if (!id) throw new Error('Missing ID')
@@ -38,7 +41,7 @@ export const useVFsSelection = (
 
           itemsToAdd = allIds.slice(startIdx, endIdx)
         }
-        itemsToAdd.forEach(i => selectedIdModel.value.add(i))
+        itemsToAdd.forEach(i => selectedIdModel.value?.add(i))
       }
       if (action === 'select') {
         selectedIdModel.value.clear()

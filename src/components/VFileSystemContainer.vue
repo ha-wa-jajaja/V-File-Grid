@@ -64,28 +64,33 @@ const {
   ghostSelectHeight,
 } = vFsGhostSelectDim
 
-// function setVfsClearClickAction() {
-//   window.addEventListener('click', e => {
-//     if (isDoingVfsGhostSelect.value) {
-//       isDoingVfsGhostSelect.value = false
-//       return
-//     }
+let loggedCount = 0
+function setVfsClearClickAction() {
+  window.addEventListener('click', e => {
+    console.log('window click event')
+    console.log(isDoingVfsGhostSelect.value)
+    loggedCount++
+    console.log(loggedCount)
 
-//     const typedEvent = e as unknown as {
-//       target: { classList: { contains: (arg: string) => boolean } }
-//     }
-//     if (!e.target || !typedEvent.target.classList) return
-//     if (!typedEvent.target.classList.contains('material-image')) {
-//       updateSelectedIdModel('clear')
-//     }
-//   })
-// }
+    if (isDoingVfsGhostSelect.value) {
+      isDoingVfsGhostSelect.value = false
+      return
+    }
 
-// onMounted(() => {
-//   setVfsClearClickAction()
-// })
+    const typedEvent = e as unknown as {
+      target: { classList: { contains: (arg: string) => boolean } }
+    }
+    if (!e.target || !typedEvent.target.classList) return
+    if (!typedEvent.target.classList.contains(props.itemClassName)) {
+      updateSelectedIdModel('clear')
+    }
+  })
+}
 
-// FIXME: Type problems
+onMounted(() => {
+  setVfsClearClickAction()
+})
+
 // FIXME: Click outside
 </script>
 
@@ -126,7 +131,6 @@ const {
       <slot name="items" />
     </div>
 
-    <!-- TODO: Backboard slot -->
     <div
       class="v-file-system-container__multi-items-board"
       ref="multiItemsBoard"

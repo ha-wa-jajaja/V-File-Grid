@@ -19,8 +19,8 @@ if (!selectionInjection) {
 const { selectedIds, multiItemsBoard, updateSelectedIds, updateScrollerY } =
   selectionInjection
 
-const isSelected = computed(() => selectedIds.value.has(props.id))
-const selectedItemsCount = computed(() => selectedIds.value.size)
+const isSelected = computed(() => !!selectedIds.value?.has(props.id))
+const selectedItemsCount = computed(() => selectedIds.value?.size ?? 0)
 
 const { onVFsItemMouseDown, onVFsItemClick } = useVFsItemClickChain({
   vFsItemId: props.id,
@@ -40,7 +40,6 @@ watch(isDragging, v => {
   emits('onItemDragStateChange', v)
 })
 
-// TODO: Send the isDragging value outside: => emits('onDragStateChange') ?
 // TODO: Should add a drop action here? Or another component?
 </script>
 

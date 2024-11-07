@@ -1,4 +1,4 @@
-import type { Ref } from 'vue'
+import type { Ref, ModelRef } from 'vue'
 
 export type VFsContainerProps = {
   id: string
@@ -10,9 +10,10 @@ export type VFsContainerUpdateSelectedIds = (
 ) => void
 
 export type VFsScrollerYSetter = (val: number) => void
+export type SelectedIdsModel = ModelRef<Set<string> | undefined>
 
 export type VFsContainerProvides = {
-  selectedIds: Ref<Set<string>>
+  selectedIds: SelectedIdsModel
   multiItemsBoard: Ref<HTMLElement | null>
   updateSelectedIds: VFsContainerUpdateSelectedIds
   updateScrollerY: VFsScrollerYSetter
