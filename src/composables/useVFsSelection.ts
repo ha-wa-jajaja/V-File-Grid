@@ -8,8 +8,6 @@ export const useVFsSelection = (
     action: 'clear' | 'select' | 'delete' | 'append' | 'add-multi',
     id?: string,
   ) {
-    console.log('update model called', action)
-
     if (!selectedIdModel.value) {
       throw new Error('SelectedIdsModel is not defined')
     }

@@ -16,6 +16,7 @@ export const useVFsGhostSelector = ({
   vFsItemClassName,
 }: useVFsGhostSelectorProps) => {
   const isDoingVfsGhostSelect = ref(false)
+  const displayVFsGhostSelect = ref(false)
   const ghostSelectInitX = ref(0)
   const ghostSelectInitY = ref(0)
   const ghostSelectPosX = ref(0)
@@ -32,11 +33,18 @@ export const useVFsGhostSelector = ({
       ghostSelectPosX.value = e.pageX
       ghostSelectPosY.value = e.pageY
     } else {
+      if (isDoingVfsGhostSelect.value && !displayVFsGhostSelect.value)
+        isDoingVfsGhostSelect.value = false
       ghostSelectPosX.value = 0
       ghostSelectPosY.value = 0
       ghostSelectWidth.value = 0
       ghostSelectHeight.value = 0
     }
+  }
+
+  function endVfsGhostSelect() {
+    isDoingVfsGhostSelect.value = false
+    displayVFsGhostSelect.value = false
   }
 
   const { doCheckItemCollide } = useCheckVFsItemCollide()
@@ -48,6 +56,8 @@ export const useVFsGhostSelector = ({
     height: number,
   ) {
     if (!isDoingVfsGhostSelect.value) return
+
+    displayVFsGhostSelect.value = true
 
     const w = Math.abs(width - x)
     const h = Math.abs(height - y)
@@ -129,6 +139,8 @@ export const useVFsGhostSelector = ({
 
   return {
     isDoingVfsGhostSelect,
+    displayVFsGhostSelect,
+    endVfsGhostSelect,
     vFsGhostSelectDim: {
       ghostSelectInitX,
       ghostSelectInitY,
