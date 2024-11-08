@@ -1,6 +1,6 @@
 <!-- https://vuejs.org/guide/components/slots.html#scoped-slots -->
 <script setup lang="ts">
-import { computed, onMounted, provide, ref, defineModel } from 'vue'
+import { computed, onMounted, provide, ref, defineModel, watch } from 'vue'
 import type { VFsContainerProvides } from '@/types/types'
 import { useVFsSelection } from '@/composables/useVFsSelection'
 import { useVFsGhostSelector } from '@/composables/useVFsGhostSelector'
@@ -64,22 +64,30 @@ const {
   ghostSelectHeight,
 } = vFsGhostSelectDim
 
-let loggedCount = 0
+// watch(isDoingVfsGhostSelect, v => {
+//   // console.log('Ghost select:', v)
+// })
+
+// FIXME: Clear all logic
+// FIXME: Work on ghost selecting and cursor moves outta container
 function setVfsClearClickAction() {
   window.addEventListener('click', e => {
-    console.log('window click event')
-    console.log(isDoingVfsGhostSelect.value)
-    loggedCount++
-    console.log(loggedCount)
+    // console.log('on click fires')
+    // e.stopImmediatePropagation()
+    e.stopPropagation()
 
     if (isDoingVfsGhostSelect.value) {
       isDoingVfsGhostSelect.value = false
+      // console.log('Ghost select ends')
       return
     }
 
     const typedEvent = e as unknown as {
       target: { classList: { contains: (arg: string) => boolean } }
     }
+    console.log(typedEvent.target.classList)
+    console.log(typedEvent.target.classList.contains(props.itemClassName))
+
     if (!e.target || !typedEvent.target.classList) return
     if (!typedEvent.target.classList.contains(props.itemClassName)) {
       updateSelectedIdModel('clear')
@@ -90,8 +98,6 @@ function setVfsClearClickAction() {
 onMounted(() => {
   setVfsClearClickAction()
 })
-
-// FIXME: Click outside
 </script>
 
 <template>

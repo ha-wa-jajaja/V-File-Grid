@@ -32,8 +32,6 @@ export const useVFsGhostSelector = ({
       ghostSelectPosX.value = e.pageX
       ghostSelectPosY.value = e.pageY
     } else {
-      // isDoingVfsGhostSelect.value = false
-
       ghostSelectPosX.value = 0
       ghostSelectPosY.value = 0
       ghostSelectWidth.value = 0
@@ -50,6 +48,7 @@ export const useVFsGhostSelector = ({
     height: number,
   ) {
     if (!isDoingVfsGhostSelect.value) return
+
     const w = Math.abs(width - x)
     const h = Math.abs(height - y)
 
