@@ -28,10 +28,10 @@ export const useVFsGhostSelector = ({
     if (enable) {
       isDoingVfsGhostSelect.value = true
 
-      ghostSelectInitX.value = e.pageX
-      ghostSelectInitY.value = e.pageY
-      ghostSelectPosX.value = e.pageX
-      ghostSelectPosY.value = e.pageY
+      ghostSelectInitX.value = e.clientX
+      ghostSelectInitY.value = e.clientY
+      ghostSelectPosX.value = e.clientX
+      ghostSelectPosY.value = e.clientY
     } else {
       if (isDoingVfsGhostSelect.value && !displayVFsGhostSelect.value)
         isDoingVfsGhostSelect.value = false

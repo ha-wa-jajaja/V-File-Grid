@@ -99,8 +99,8 @@ onMounted(() => {
     @mouseup="toggleVFsGhostSelect(false, $event)"
     @mousemove="
       updateVFsGhostSelectFrame(
-        $event.pageX,
-        $event.pageY,
+        $event.clientX,
+        $event.clientY,
         ghostSelectInitX,
         ghostSelectInitY,
       )
