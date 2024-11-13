@@ -155,8 +155,8 @@ onMounted(() => {
 .v-file-system-container__multi-items-board {
   position: fixed;
   z-index: -1;
-  top: 0;
-  left: 0;
+  top: 100%;
+  left: 100%;
 }
 
 .v-file-system__items {

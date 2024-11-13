@@ -56,6 +56,10 @@ const selectedIds = ref(new Set<string>())
           </div>
         </VFileSystemItem>
       </template>
+
+      <template #multiItemsBoard>
+        <div class="multi-board">{{ selectedIds.size }}</div>
+      </template>
     </VFileSystemContainer>
   </div>
 </template>
@@ -75,5 +79,15 @@ const selectedIds = ref(new Set<string>())
 
 .test-item.selected {
   background-color: lightcoral;
+}
+
+.multi-board {
+  background-color: greenyellow;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 80px;
 }
 </style>
