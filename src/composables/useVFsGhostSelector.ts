@@ -82,7 +82,7 @@ export const useVFsGhostSelector = ({
       const collided =
         ghostSelectEl.value && doCheckItemCollide(ghostSelectEl.value, item)
 
-      const itemId = allIds.at(index)
+      const itemId = allIds[index]
       if (!itemId) throw new Error('Item id is not found')
 
       const isSelected = selectedIds.value.has(itemId)

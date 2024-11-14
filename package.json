@@ -1,17 +1,30 @@
 {
   "name": "v-file-system",
   "version": "0.0.0",
-  "private": true,
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/v-file-system.umd.js",
+  "module": "./dist/v-file-system.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/v-file-system.es.js",
+      "require": "./dist/v-file-system.umd.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "vue-tsc -p tsconfig.build.json && vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "format": "prettier -write src/"
   },
   "dependencies": {
     "@vueuse/core": "^11.2.0",
