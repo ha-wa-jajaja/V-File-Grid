@@ -1,18 +1,18 @@
 {
-  "name": "vfsssssssss",
+  "name": "v-file-grid",
   "version": "0.0.101",
   "type": "module",
   "files": [
     "dist"
   ],
-  "main": "./dist/v-file-system.umd.js",
-  "module": "./dist/v-file-system.es.js",
+  "main": "./dist/v-file-grid.umd.js",
+  "module": "./dist/v-file-grid.es.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/v-file-system.es.js",
-      "require": "./dist/v-file-system.umd.js"
+      "import": "./dist/v-file-grid.es.js",
+      "require": "./dist/v-file-grid.umd.js"
     },
     "./style.css": "./dist/style.css"
   },

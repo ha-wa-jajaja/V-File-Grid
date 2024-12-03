@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import type { VFsFileUploaderProvides } from '@/types/types'
+import type { VFgFileUploaderProvides } from '@/types/types'
 import { provide, ref } from 'vue'
 
 const props = defineProps<{
@@ -69,7 +69,7 @@ function overAction(event: Event, bool: boolean) {
   }
 }
 
-provide<VFsFileUploaderProvides>('uploader', {
+provide<VFgFileUploaderProvides>('uploader', {
   isInternalDragging,
   setInternalDragStatus,
 })

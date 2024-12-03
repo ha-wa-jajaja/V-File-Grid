@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type {
-  VFsContainerProvides,
-  VFsFileUploaderProvides,
+  VFgContainerProvides,
+  VFgFileUploaderProvides,
 } from '@/types/types'
-import { useVFsItemClickChain } from '@/composables/useVFsItemClickChain'
-import { useVFsItemDragChain } from '@/composables/useVFsItemDragChain'
+import { useVFgItemClickChain } from '@/composables/useVFgItemClickChain'
+import { useVFgItemDragChain } from '@/composables/useVFgItemDragChain'
 import { defineProps, inject, computed, watch } from 'vue'
 
 const props = defineProps<{
@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const emits = defineEmits(['onItemDragStateChange'])
 
-const selectionInjection = inject<VFsContainerProvides>('selection')
+const selectionInjection = inject<VFgContainerProvides>('selection')
 if (!selectionInjection) {
   console.error('Injection for "selection" not found')
   throw new Error('Injection not found')
@@ -22,7 +22,7 @@ if (!selectionInjection) {
 const { selectedIds, multiItemsBoard, updateSelectedIds, updateScrollerY } =
   selectionInjection
 
-const fileUploaderInjection = inject<VFsFileUploaderProvides>('uploader')
+const fileUploaderInjection = inject<VFgFileUploaderProvides>('uploader')
 if (!fileUploaderInjection) {
   console.error('Injection for "uploader" not found')
   throw new Error('Injection not found')
@@ -32,13 +32,13 @@ const { setInternalDragStatus } = fileUploaderInjection
 const isSelected = computed(() => !!selectedIds.value?.has(props.id))
 const selectedItemsCount = computed(() => selectedIds.value?.size ?? 0)
 
-const { onVFsItemMouseDown, onVFsItemClick } = useVFsItemClickChain({
+const { onVFgItemMouseDown, onVFgItemClick } = useVFgItemClickChain({
   vFsItemId: props.id,
   isSelected,
   updateSelectedIds,
 })
 
-const { isDragging, onDragStart, onDragMove, onDragEnd } = useVFsItemDragChain({
+const { isDragging, onDragStart, onDragMove, onDragEnd } = useVFgItemDragChain({
   itemId: props.id,
   selectedItemsCount,
   scrollerY: props.scrollerY,
@@ -57,8 +57,8 @@ watch(isDragging, v => {
 <template>
   <div
     draggable="true"
-    @mousedown="onVFsItemMouseDown"
-    @click="onVFsItemClick"
+    @mousedown="onVFgItemMouseDown"
+    @click="onVFgItemClick"
     @dragstart="onDragStart"
     @drag="onDragMove"
     @dragend="onDragEnd"

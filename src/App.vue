@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import VFileSystemFileUploader from './components/VFileSystemFileUploader.vue'
-import VFileSystemContainer from './components/VFileSystemContainer.vue'
-import VFileSystemItem from './components/VFileSystemItem.vue'
+import VFileGridFileUploader from './components/VFileGridFileUploader.vue'
+import VFileGridContainer from './components/VFileGridContainer.vue'
+import VFileGridItem from './components/VFileGridItem.vue'
 import { ref } from 'vue'
 
 const allIds = ref([
@@ -38,17 +38,17 @@ const selectedIds = ref(new Set<string>())
 
 <template>
   <div class="test">
-    <VFileSystemFileUploader :accept-files="'.jpg'">
+    <VFileGridFileUploader :accept-files="'.jpg'">
       <template #board>test</template>
       <template #content>
-        <VFileSystemContainer
+        <VFileGridContainer
           v-model="selectedIds"
           :all-ids="allIds"
           :item-class-name="'test-item'"
           :ghost-selector-bg="'#FF0000'"
         >
           <template #items>
-            <VFileSystemItem
+            <VFileGridItem
               v-for="id in allIds"
               :key="id"
               :id="id"
@@ -61,15 +61,15 @@ const selectedIds = ref(new Set<string>())
               >
                 {{ id }}
               </div>
-            </VFileSystemItem>
+            </VFileGridItem>
           </template>
 
           <template #multiItemsBoard>
             <div class="multi-board">{{ selectedIds.size }}</div>
           </template>
-        </VFileSystemContainer>
+        </VFileGridContainer>
       </template>
-    </VFileSystemFileUploader>
+    </VFileGridFileUploader>
   </div>
 </template>
 

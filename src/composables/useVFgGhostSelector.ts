@@ -2,21 +2,21 @@ import { ref } from 'vue'
 import type { Ref } from 'vue'
 import type { SelectedIdsModel } from '@/types/types'
 
-export type useVFsGhostSelectorProps = {
+export type useVFgGhostSelectorProps = {
   selectedIds: SelectedIdsModel
   allIds: string[]
   ghostSelectEl: Ref<HTMLElement | null>
   vFsItemClassName: string
 }
 
-export const useVFsGhostSelector = ({
+export const useVFgGhostSelector = ({
   selectedIds,
   allIds,
   ghostSelectEl,
   vFsItemClassName,
-}: useVFsGhostSelectorProps) => {
+}: useVFgGhostSelectorProps) => {
   const isDoingVfsGhostSelect = ref(false)
-  const displayVFsGhostSelect = ref(false)
+  const displayVFgGhostSelect = ref(false)
   const ghostSelectInitX = ref(0)
   const ghostSelectInitY = ref(0)
   const ghostSelectPosX = ref(0)
@@ -24,7 +24,7 @@ export const useVFsGhostSelector = ({
   const ghostSelectWidth = ref(0)
   const ghostSelectHeight = ref(0)
 
-  function toggleVFsGhostSelect(enable: boolean, e: MouseEvent) {
+  function toggleVFgGhostSelect(enable: boolean, e: MouseEvent) {
     if (enable) {
       isDoingVfsGhostSelect.value = true
 
@@ -33,7 +33,7 @@ export const useVFsGhostSelector = ({
       ghostSelectPosX.value = e.clientX
       ghostSelectPosY.value = e.clientY
     } else {
-      if (isDoingVfsGhostSelect.value && !displayVFsGhostSelect.value)
+      if (isDoingVfsGhostSelect.value && !displayVFgGhostSelect.value)
         isDoingVfsGhostSelect.value = false
       ghostSelectPosX.value = 0
       ghostSelectPosY.value = 0
@@ -44,12 +44,12 @@ export const useVFsGhostSelector = ({
 
   function endVfsGhostSelect() {
     isDoingVfsGhostSelect.value = false
-    displayVFsGhostSelect.value = false
+    displayVFgGhostSelect.value = false
   }
 
-  const { doCheckItemCollide } = useCheckVFsItemCollide()
+  const { doCheckItemCollide } = useCheckVFgItemCollide()
 
-  function updateVFsGhostSelectFrame(
+  function updateVFgGhostSelectFrame(
     x: number,
     y: number,
     width: number,
@@ -57,7 +57,7 @@ export const useVFsGhostSelector = ({
   ) {
     if (!isDoingVfsGhostSelect.value) return
 
-    displayVFsGhostSelect.value = true
+    displayVFgGhostSelect.value = true
 
     const w = Math.abs(width - x)
     const h = Math.abs(height - y)
@@ -95,7 +95,7 @@ export const useVFsGhostSelector = ({
     })
   }
 
-  function useCheckVFsItemCollide() {
+  function useCheckVFgItemCollide() {
     function getElOffset(el: Element) {
       if (!el) return
 
@@ -139,7 +139,7 @@ export const useVFsGhostSelector = ({
 
   return {
     isDoingVfsGhostSelect,
-    displayVFsGhostSelect,
+    displayVFgGhostSelect,
     endVfsGhostSelect,
     vFsGhostSelectDim: {
       ghostSelectInitX,
@@ -149,7 +149,7 @@ export const useVFsGhostSelector = ({
       ghostSelectWidth,
       ghostSelectHeight,
     },
-    toggleVFsGhostSelect,
-    updateVFsGhostSelectFrame,
+    toggleVFgGhostSelect,
+    updateVFgGhostSelectFrame,
   }
 }

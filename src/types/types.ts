@@ -1,25 +1,25 @@
 import type { Ref, ModelRef } from 'vue'
 
-export type VFsContainerProps = {
+export type VFgContainerProps = {
   id: string
 }
 
-export type VFsContainerUpdateSelectedIds = (
+export type VFgContainerUpdateSelectedIds = (
   action: 'clear' | 'select' | 'delete' | 'append' | 'add-multi',
   id?: string,
 ) => void
 
-export type VFsScrollerYSetter = (val: number) => void
+export type VFgScrollerYSetter = (val: number) => void
 export type SelectedIdsModel = ModelRef<Set<string> | undefined>
 
-export type VFsContainerProvides = {
+export type VFgContainerProvides = {
   selectedIds: SelectedIdsModel
   multiItemsBoard: Ref<HTMLElement | null>
-  updateSelectedIds: VFsContainerUpdateSelectedIds
-  updateScrollerY: VFsScrollerYSetter
+  updateSelectedIds: VFgContainerUpdateSelectedIds
+  updateScrollerY: VFgScrollerYSetter
 }
 
-export type VFsFileUploaderProvides = {
+export type VFgFileUploaderProvides = {
   isInternalDragging: Ref<boolean>
   setInternalDragStatus: (bool: boolean) => void
 }

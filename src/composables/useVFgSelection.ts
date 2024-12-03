@@ -1,6 +1,6 @@
 import type { SelectedIdsModel } from '@/types/types'
 
-export const useVFsSelection = (
+export const useVFgSelection = (
   selectedIdModel: SelectedIdsModel,
   allIds: string[],
 ) => {

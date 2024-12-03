@@ -2,7 +2,7 @@ import { useWindowSize } from '@vueuse/core'
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 
-type UseVFsItemDragChainProps = {
+type UseVFgItemDragChainProps = {
   itemId: string
   selectedItemsCount: Ref<number>
   scrollerY: number
@@ -11,14 +11,14 @@ type UseVFsItemDragChainProps = {
   multiSelectionBackboard: Ref<HTMLElement | null>
 }
 
-export const useVFsItemDragChain = ({
+export const useVFgItemDragChain = ({
   itemId,
   selectedItemsCount,
   scrollerY,
   scrollerYSetter,
   setInternalDragStatus,
   multiSelectionBackboard,
-}: UseVFsItemDragChainProps) => {
+}: UseVFgItemDragChainProps) => {
   const { height: windowH } = useWindowSize()
   const isDragging = ref(false)
 

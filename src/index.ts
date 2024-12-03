@@ -1,13 +1,13 @@
 // Components
-export { default as VFileSystemContainer } from './components/VFileSystemContainer.vue'
-export { default as VFileSystemItem } from './components/VFileSystemItem.vue'
-export { default as VFileSystemFileUploader } from './components/VFileSystemFileUploader.vue'
+export { default as VFileGridContainer } from './components/VFileGridContainer.vue'
+export { default as VFileGridItem } from './components/VFileGridItem.vue'
+export { default as VFileGridFileUploader } from './components/VFileGridFileUploader.vue'
 
 // Composables
-export { useVFsGhostSelector } from './composables/useVFsGhostSelector'
-export { useVFsItemClickChain } from './composables/useVFsItemClickChain'
-export { useVFsItemDragChain } from './composables/useVFsItemDragChain'
-export { useVFsSelection } from './composables/useVFsSelection'
+export { useVFgGhostSelector } from './composables/useVFgGhostSelector'
+export { useVFgItemClickChain } from './composables/useVFgItemClickChain'
+export { useVFgItemDragChain } from './composables/useVFgItemDragChain'
+export { useVFgSelection } from './composables/useVFgSelection'
 
 // Types
 export * from './types/types'

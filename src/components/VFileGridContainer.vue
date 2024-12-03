@@ -1,9 +1,9 @@
 <!-- https://vuejs.org/guide/components/slots.html#scoped-slots -->
 <script setup lang="ts">
 import { computed, onMounted, provide, ref, defineModel } from 'vue'
-import type { VFsContainerProvides } from '@/types/types'
-import { useVFsSelection } from '@/composables/useVFsSelection'
-import { useVFsGhostSelector } from '@/composables/useVFsGhostSelector'
+import type { VFgContainerProvides } from '@/types/types'
+import { useVFgSelection } from '@/composables/useVFgSelection'
+import { useVFgGhostSelector } from '@/composables/useVFgGhostSelector'
 
 const props = withDefaults(
   defineProps<{
@@ -31,8 +31,8 @@ const multiItemsBoard = ref<HTMLElement | null>(null)
 
 const selectedIdModel = defineModel<Set<string>>()
 
-const { updateSelectedIdModel } = useVFsSelection(selectedIdModel, props.allIds)
-provide<VFsContainerProvides>('selection', {
+const { updateSelectedIdModel } = useVFgSelection(selectedIdModel, props.allIds)
+provide<VFgContainerProvides>('selection', {
   selectedIds: selectedIdModel,
   updateSelectedIds: updateSelectedIdModel,
   multiItemsBoard,
@@ -45,12 +45,12 @@ const vFsGhostSelEl = ref<HTMLElement | null>(null)
 
 const {
   isDoingVfsGhostSelect,
-  displayVFsGhostSelect,
+  displayVFgGhostSelect,
   vFsGhostSelectDim,
   endVfsGhostSelect,
-  toggleVFsGhostSelect,
-  updateVFsGhostSelectFrame,
-} = useVFsGhostSelector({
+  toggleVFgGhostSelect,
+  updateVFgGhostSelectFrame,
+} = useVFgGhostSelector({
   selectedIds: selectedIdModel,
   allIds: props.allIds,
   ghostSelectEl: vFsGhostSelEl,
@@ -70,7 +70,7 @@ function setVfsClearClickAction() {
   window.addEventListener('click', e => {
     e.stopPropagation()
 
-    if (isDoingVfsGhostSelect.value && displayVFsGhostSelect.value) {
+    if (isDoingVfsGhostSelect.value && displayVFgGhostSelect.value) {
       endVfsGhostSelect()
       return
     }
@@ -95,10 +95,10 @@ onMounted(() => {
   <section
     class="v-file-system-container"
     :class="props.containerClassName"
-    @mousedown="toggleVFsGhostSelect(true, $event)"
-    @mouseup="toggleVFsGhostSelect(false, $event)"
+    @mousedown="toggleVFgGhostSelect(true, $event)"
+    @mouseup="toggleVFgGhostSelect(false, $event)"
     @mousemove="
-      updateVFsGhostSelectFrame(
+      updateVFgGhostSelectFrame(
         $event.clientX,
         $event.clientY,
         ghostSelectInitX,
@@ -109,7 +109,7 @@ onMounted(() => {
     <div
       ref="vFsGhostSelEl"
       class="v-file-system-container__ghost-selector"
-      v-show="displayVFsGhostSelect"
+      v-show="displayVFgGhostSelect"
       :style="{
         top: `${ghostSelectPosY}px`,
         left: `${ghostSelectPosX}px`,

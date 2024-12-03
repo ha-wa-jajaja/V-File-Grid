@@ -1,20 +1,20 @@
-import type { VFsContainerUpdateSelectedIds } from '@/types/types'
+import type { VFgContainerUpdateSelectedIds } from '@/types/types'
 import type { Ref } from 'vue'
 
-export type UseVFsItemClickChainProps = {
+export type UseVFgItemClickChainProps = {
   vFsItemId: string
   isSelected: Ref<boolean>
-  updateSelectedIds: VFsContainerUpdateSelectedIds
+  updateSelectedIds: VFgContainerUpdateSelectedIds
 }
 
-export const useVFsItemClickChain = ({
+export const useVFgItemClickChain = ({
   vFsItemId,
   isSelected,
   updateSelectedIds,
-}: UseVFsItemClickChainProps) => {
+}: UseVFgItemClickChainProps) => {
   let isMouseDownAction = false
 
-  function onVFsItemMouseDown(e: MouseEvent) {
+  function onVFgItemMouseDown(e: MouseEvent) {
     e.stopPropagation()
     if (isSelected.value) return
 
@@ -33,7 +33,7 @@ export const useVFsItemClickChain = ({
     updateSelectedIds('select', vFsItemId)
   }
 
-  function onVFsItemClick() {
+  function onVFgItemClick() {
     if (isMouseDownAction) {
       isMouseDownAction = false
       return
@@ -41,5 +41,5 @@ export const useVFsItemClickChain = ({
     if (isSelected.value) updateSelectedIds('select', vFsItemId)
   }
 
-  return { onVFsItemMouseDown, onVFsItemClick }
+  return { onVFgItemMouseDown, onVFgItemClick }
 }
