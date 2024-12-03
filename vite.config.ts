@@ -13,7 +13,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'VFileSystem',
-      fileName: format => `v-file-system.${format}.js`,
+      fileName: format => `v-file-grid.${format}.js`,
     },
     rollupOptions: {
       external: ['vue', '@vueuse/core'],

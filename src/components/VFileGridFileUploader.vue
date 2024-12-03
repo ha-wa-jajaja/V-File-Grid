@@ -1,6 +1,6 @@
 <template>
   <div
-    class="v-file-system__uploader"
+    class="v-file-grid__uploader"
     @dragenter="overAction($event, true)"
     @dragleave="overAction($event, false)"
   >
@@ -12,12 +12,12 @@
       @change="emitFiles"
     />
 
-    <div v-show="showDropUploadBoard" class="v-file-system__uploader-board">
+    <div v-show="showDropUploadBoard" class="v-file-grid__uploader-board">
       <slot name="board"></slot>
     </div>
 
     <div
-      class="v-file-system__uploader-content"
+      class="v-file-grid__uploader-content"
       :class="{ hide: showDropUploadBoard }"
     >
       <slot name="content"></slot>
@@ -76,7 +76,7 @@ provide<VFgFileUploaderProvides>('uploader', {
 </script>
 
 <style lang="scss" scoped>
-.v-file-system__uploader {
+.v-file-grid__uploader {
   position: relative;
 
   input[type='file'] {

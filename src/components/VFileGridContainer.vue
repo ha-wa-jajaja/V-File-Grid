@@ -93,7 +93,7 @@ onMounted(() => {
 
 <template>
   <section
-    class="v-file-system-container"
+    class="v-file-grid-container"
     :class="props.containerClassName"
     @mousedown="toggleVFgGhostSelect(true, $event)"
     @mouseup="toggleVFgGhostSelect(false, $event)"
@@ -108,7 +108,7 @@ onMounted(() => {
   >
     <div
       ref="vFsGhostSelEl"
-      class="v-file-system-container__ghost-selector"
+      class="v-file-grid-container__ghost-selector"
       v-show="displayVFgGhostSelect"
       :style="{
         top: `${ghostSelectPosY}px`,
@@ -120,7 +120,7 @@ onMounted(() => {
     ></div>
 
     <div
-      class="v-file-system__items"
+      class="v-file-grid__items"
       :style="{
         '--v-items-grid-cols': props.cols,
         '--v-items-grid-gap': gapValue,
@@ -129,37 +129,34 @@ onMounted(() => {
       <slot name="items" />
     </div>
 
-    <div
-      class="v-file-system-container__multi-items-board"
-      ref="multiItemsBoard"
-    >
+    <div class="v-file-grid-container__multi-items-board" ref="multiItemsBoard">
       <slot name="multiItemsBoard" />
     </div>
   </section>
 </template>
 
 <style scoped>
-.v-file-system-container {
+.v-file-grid-container {
   width: 100%;
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
 
-.v-file-system-container__ghost-selector {
+.v-file-grid-container__ghost-selector {
   position: fixed;
   background-color: var(--ghost-sel-bg);
   z-index: 9999;
 }
 
-.v-file-system-container__multi-items-board {
+.v-file-grid-container__multi-items-board {
   position: fixed;
   z-index: -1;
   top: 100%;
   left: 100%;
 }
 
-.v-file-system__items {
+.v-file-grid__items {
   display: grid;
   grid-template-columns: repeat(var(--v-items-grid-cols), minmax(0, 1fr));
   gap: var(--v-items-grid-gap);

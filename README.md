@@ -44,4 +44,4 @@ npm run test:unit
 npm run lint
 ```
 
-# v-file-system
+# v-file-grid
