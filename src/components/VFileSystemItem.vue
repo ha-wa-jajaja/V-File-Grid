@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { VFsContainerProvides } from '@/types/types'
+import type {
+  VFsContainerProvides,
+  VFsFileUploaderProvides,
+} from '@/types/types'
 import { useVFsItemClickChain } from '@/composables/useVFsItemClickChain'
 import { useVFsItemDragChain } from '@/composables/useVFsItemDragChain'
 import { defineProps, inject, computed, watch } from 'vue'
@@ -19,6 +22,13 @@ if (!selectionInjection) {
 const { selectedIds, multiItemsBoard, updateSelectedIds, updateScrollerY } =
   selectionInjection
 
+const fileUploaderInjection = inject<VFsFileUploaderProvides>('uploader')
+if (!fileUploaderInjection) {
+  console.error('Injection for "uploader" not found')
+  throw new Error('Injection not found')
+}
+const { setInternalDragStatus } = fileUploaderInjection
+
 const isSelected = computed(() => !!selectedIds.value?.has(props.id))
 const selectedItemsCount = computed(() => selectedIds.value?.size ?? 0)
 
@@ -34,6 +44,7 @@ const { isDragging, onDragStart, onDragMove, onDragEnd } = useVFsItemDragChain({
   scrollerY: props.scrollerY,
   scrollerYSetter: updateScrollerY,
   multiSelectionBackboard: multiItemsBoard,
+  setInternalDragStatus,
 })
 
 watch(isDragging, v => {

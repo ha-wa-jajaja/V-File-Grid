@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VFileSystemFileUploader from './components/VFileSystemFileUploader.vue'
 import VFileSystemContainer from './components/VFileSystemContainer.vue'
 import VFileSystemItem from './components/VFileSystemItem.vue'
 import { ref } from 'vue'
@@ -37,30 +38,38 @@ const selectedIds = ref(new Set<string>())
 
 <template>
   <div class="test">
-    <VFileSystemContainer
-      v-model="selectedIds"
-      :all-ids="allIds"
-      :item-class-name="'test-item'"
-      :ghost-selector-bg="'#FF0000'"
-    >
-      <template #items>
-        <VFileSystemItem
-          v-for="id in allIds"
-          :key="id"
-          :id="id"
-          :scroller-y="0"
-          v-slot="slotProps"
+    <VFileSystemFileUploader :accept-files="'.jpg'">
+      <template #board>test</template>
+      <template #content>
+        <VFileSystemContainer
+          v-model="selectedIds"
+          :all-ids="allIds"
+          :item-class-name="'test-item'"
+          :ghost-selector-bg="'#FF0000'"
         >
-          <div class="test-item" :class="{ selected: slotProps.isSelected }">
-            {{ id }}
-          </div>
-        </VFileSystemItem>
-      </template>
+          <template #items>
+            <VFileSystemItem
+              v-for="id in allIds"
+              :key="id"
+              :id="id"
+              :scroller-y="0"
+              v-slot="slotProps"
+            >
+              <div
+                class="test-item"
+                :class="{ selected: slotProps.isSelected }"
+              >
+                {{ id }}
+              </div>
+            </VFileSystemItem>
+          </template>
 
-      <template #multiItemsBoard>
-        <div class="multi-board">{{ selectedIds.size }}</div>
+          <template #multiItemsBoard>
+            <div class="multi-board">{{ selectedIds.size }}</div>
+          </template>
+        </VFileSystemContainer>
       </template>
-    </VFileSystemContainer>
+    </VFileSystemFileUploader>
   </div>
 </template>
 

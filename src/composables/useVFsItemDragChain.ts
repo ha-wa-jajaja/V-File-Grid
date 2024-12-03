@@ -7,6 +7,7 @@ type UseVFsItemDragChainProps = {
   selectedItemsCount: Ref<number>
   scrollerY: number
   scrollerYSetter: (val: number) => void
+  setInternalDragStatus: (bool: boolean) => void
   multiSelectionBackboard: Ref<HTMLElement | null>
 }
 
@@ -15,6 +16,7 @@ export const useVFsItemDragChain = ({
   selectedItemsCount,
   scrollerY,
   scrollerYSetter,
+  setInternalDragStatus,
   multiSelectionBackboard,
 }: UseVFsItemDragChainProps) => {
   const { height: windowH } = useWindowSize()
@@ -27,6 +29,7 @@ export const useVFsItemDragChain = ({
     event.stopImmediatePropagation()
 
     isDragging.value = true
+    setInternalDragStatus(true)
 
     if (multiSelectionBackboard.value && selectedItemsCount.value > 1) {
       event.dataTransfer?.setDragImage(multiSelectionBackboard.value, 50, 50)
@@ -52,6 +55,8 @@ export const useVFsItemDragChain = ({
 
   function onDragEnd() {
     isDragging.value = false
+    setInternalDragStatus(false)
+
     if (moveDragInterval) {
       clearInterval(moveDragInterval)
       moveDragInterval = null

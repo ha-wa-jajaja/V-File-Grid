@@ -18,3 +18,8 @@ export type VFsContainerProvides = {
   updateSelectedIds: VFsContainerUpdateSelectedIds
   updateScrollerY: VFsScrollerYSetter
 }
+
+export type VFsFileUploaderProvides = {
+  isInternalDragging: Ref<boolean>
+  setInternalDragStatus: (bool: boolean) => void
+}
