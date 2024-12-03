@@ -1,6 +1,7 @@
 // Components
 export { default as VFileSystemContainer } from './components/VFileSystemContainer.vue'
 export { default as VFileSystemItem } from './components/VFileSystemItem.vue'
+export { default as VFileSystemFileUploader } from './components/VFileSystemFileUploader.vue'
 
 // Composables
 export { useVFsGhostSelector } from './composables/useVFsGhostSelector'
