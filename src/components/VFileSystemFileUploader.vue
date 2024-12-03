@@ -32,8 +32,8 @@ import { provide, ref } from 'vue'
 const props = defineProps<{
   acceptFiles: string
 }>()
-
 const emits = defineEmits(['droppedFiles'])
+
 const fileInput = ref<HTMLInputElement | null>(null)
 function emitFiles(event: Event) {
   const input = event.target as HTMLInputElement
