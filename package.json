@@ -1,6 +1,6 @@
 {
   "name": "v-file-grid",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "files": [
     "dist"
@@ -30,7 +30,7 @@
     "vue": "^3.5.12"
   },
   "peerDependencies": {
-    "@vueuse/core": "^11.2.0"
+    "@vueuse/core": "^10.9.0"
   },
   "peerDependencyRules": {
     "ignoreMissing": [
