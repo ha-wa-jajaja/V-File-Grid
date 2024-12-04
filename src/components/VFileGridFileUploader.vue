@@ -1,17 +1,11 @@
 <template>
   <div
     class="v-file-grid__uploader"
+    @dragover.prevent
     @dragenter="overAction($event, true)"
     @dragleave="overAction($event, false)"
+    @drop="emitFiles($event)"
   >
-    <input
-      ref="fileInput"
-      type="file"
-      multiple
-      :accept="props.acceptFiles"
-      @change="emitFiles"
-    />
-
     <div v-show="showDropUploadBoard" class="v-file-grid__uploader-board">
       <slot name="board"></slot>
     </div>
@@ -29,27 +23,15 @@
 import type { VFgFileUploaderProvides } from '@/types/types'
 import { provide, ref } from 'vue'
 
-const props = defineProps<{
-  acceptFiles: string
-}>()
 const emits = defineEmits(['droppedFiles'])
-
-const fileInput = ref<HTMLInputElement | null>(null)
-function emitFiles(event: Event) {
-  const input = event.target as HTMLInputElement
-  if (!input.files) return
-
-  const files = Array.from(input.files)
-  emits('droppedFiles', files)
-
-  if (fileInput.value) {
-    fileInput.value.value = ''
-  }
-}
 
 const showDropUploadBoard = ref(false)
 const isInternalDragging = ref(false)
 let ableToClose = false
+
+function setUploadBoard(status: boolean) {
+  showDropUploadBoard.value = status
+}
 
 function setInternalDragStatus(bool: boolean) {
   isInternalDragging.value = bool
@@ -62,10 +44,10 @@ function overAction(event: Event, bool: boolean) {
 
   if (bool) {
     ableToClose = false
-    showDropUploadBoard.value = true
+    setUploadBoard(true)
   } else {
     if (!ableToClose) return (ableToClose = true)
-    showDropUploadBoard.value = false
+    setUploadBoard(false)
   }
 }
 
@@ -73,6 +55,20 @@ provide<VFgFileUploaderProvides>('uploader', {
   isInternalDragging,
   setInternalDragStatus,
 })
+
+function emitFiles(event: DragEvent) {
+  event.preventDefault()
+  event.stopImmediatePropagation()
+
+  if (!event.dataTransfer?.items) return
+  const filesEntries = Array.from(event.dataTransfer.items).map(
+    file => file.webkitGetAsEntry() as FileSystemFileEntry,
+  )
+
+  emits('droppedFiles', filesEntries)
+
+  setUploadBoard(false)
+}
 </script>
 
 <style lang="scss" scoped>

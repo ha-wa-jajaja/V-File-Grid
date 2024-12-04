@@ -34,11 +34,15 @@ const allIds = ref([
 ])
 
 const selectedIds = ref(new Set<string>())
+
+function testDrop(files: File[]) {
+  console.log(files)
+}
 </script>
 
 <template>
   <div class="test">
-    <VFileGridFileUploader :accept-files="'.jpg'">
+    <VFileGridFileUploader :accept-files="'.jpg'" @dropped-files="testDrop">
       <template #board>test</template>
       <template #content>
         <VFileGridContainer
