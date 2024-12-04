@@ -2,42 +2,49 @@
 import VFileGridFileUploader from './components/VFileGridFileUploader.vue'
 import VFileGridContainer from './components/VFileGridContainer.vue'
 import VFileGridItem from './components/VFileGridItem.vue'
-import { ref } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 
-const allIds = ref([
-  'a',
-  'b',
-  'c',
-  'd',
-  'e',
-  'f',
-  'g',
-  'h',
-  'i',
-  'j',
-  'k',
-  'l',
-  'm',
-  'n',
-  'o',
-  'p',
-  'q',
-  'r',
-  's',
-  't',
-  'u',
-  'v',
-  'w',
-  'x',
-  'y',
-  'z',
-])
+const allIds = ref<string[]>([])
 
 const selectedIds = ref(new Set<string>())
 
 function testDrop(files: File[]) {
   console.log(files)
 }
+
+onMounted(async () => {
+  await nextTick()
+  setTimeout(() => {
+    allIds.value = [
+      'a',
+      'b',
+      'c',
+      'd',
+      'e',
+      'f',
+      'g',
+      'h',
+      'i',
+      'j',
+      'k',
+      'l',
+      'm',
+      'n',
+      'o',
+      'p',
+      'q',
+      'r',
+      's',
+      't',
+      'u',
+      'v',
+      'w',
+      'x',
+      'y',
+      'z',
+    ]
+  }, 1000)
+})
 </script>
 
 <template>

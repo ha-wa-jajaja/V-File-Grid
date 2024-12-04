@@ -7,7 +7,7 @@ import { useVFgGhostSelector } from '@/composables/useVFgGhostSelector'
 
 const props = withDefaults(
   defineProps<{
-    allIds: string[]
+    allIds: Array<string | number>
     itemClassName: string
     ghostSelectorBg: string
     containerClassName?: string
@@ -20,6 +20,8 @@ const props = withDefaults(
   },
 )
 
+const computedIds = computed(() => props.allIds)
+
 const gapValue = computed(() => {
   if (typeof props.gap === 'number') return `${props.gap}px`
   return props.gap
@@ -31,7 +33,7 @@ const multiItemsBoard = ref<HTMLElement | null>(null)
 
 const selectedIdModel = defineModel<Set<string>>()
 
-const { updateSelectedIdModel } = useVFgSelection(selectedIdModel, props.allIds)
+const { updateSelectedIdModel } = useVFgSelection(selectedIdModel, computedIds)
 provide<VFgContainerProvides>('selection', {
   selectedIds: selectedIdModel,
   updateSelectedIds: updateSelectedIdModel,
@@ -52,7 +54,7 @@ const {
   updateVFgGhostSelectFrame,
 } = useVFgGhostSelector({
   selectedIds: selectedIdModel,
-  allIds: props.allIds,
+  allIds: computedIds,
   ghostSelectEl: vFsGhostSelEl,
   vFsItemClassName: props.itemClassName,
 })

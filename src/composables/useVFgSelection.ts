@@ -1,8 +1,9 @@
 import type { SelectedIdsModel } from '@/types/types'
+import type { ComputedRef } from 'vue'
 
 export const useVFgSelection = (
   selectedIdModel: SelectedIdsModel,
-  allIds: string[],
+  allIds: ComputedRef<Array<string | number>>,
 ) => {
   function updateSelectedIdModel(
     action: 'clear' | 'select' | 'delete' | 'append' | 'add-multi',
@@ -20,26 +21,26 @@ export const useVFgSelection = (
       }
       if (action === 'add-multi') {
         const selectedItemIndexes = Array.from(selectedIdModel.value).map(id =>
-          allIds.findIndex(i => i === id),
+          allIds.value.findIndex(i => i === id),
         )
-        const currItemIdx = allIds.findIndex(i => i === id)
+        const currItemIdx = allIds.value.findIndex(i => i === id)
         const firstItemIdx = Math.min(...selectedItemIndexes)
         const lastItemIdx = Math.max(...selectedItemIndexes)
 
         if ([firstItemIdx, lastItemIdx, currItemIdx].some(n => n < 0))
-          throw new Error('Id not found in material list')
+          throw new Error('Id not found in id list')
 
         let itemsToAdd
 
         if (currItemIdx < firstItemIdx) {
-          itemsToAdd = allIds.slice(currItemIdx, lastItemIdx)
+          itemsToAdd = allIds.value.slice(currItemIdx, lastItemIdx)
         } else {
           const startIdx =
             currItemIdx < lastItemIdx ? currItemIdx : lastItemIdx + 1
           const endIdx =
             currItemIdx < lastItemIdx ? lastItemIdx : currItemIdx + 1
 
-          itemsToAdd = allIds.slice(startIdx, endIdx)
+          itemsToAdd = allIds.value.slice(startIdx, endIdx)
         }
         itemsToAdd.forEach(i => selectedIdModel.value?.add(i))
       }

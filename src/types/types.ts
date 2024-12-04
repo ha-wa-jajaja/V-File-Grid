@@ -10,7 +10,7 @@ export type VFgContainerUpdateSelectedIds = (
 ) => void
 
 export type VFgScrollerYSetter = (val: number) => void
-export type SelectedIdsModel = ModelRef<Set<string> | undefined>
+export type SelectedIdsModel = ModelRef<Set<string | number> | undefined>
 
 export type VFgContainerProvides = {
   selectedIds: SelectedIdsModel

@@ -1,10 +1,10 @@
 import { ref } from 'vue'
-import type { Ref } from 'vue'
+import type { Ref, ComputedRef } from 'vue'
 import type { SelectedIdsModel } from '@/types/types'
 
 export type useVFgGhostSelectorProps = {
   selectedIds: SelectedIdsModel
-  allIds: string[]
+  allIds: ComputedRef<Array<string | number>>
   ghostSelectEl: Ref<HTMLElement | null>
   vFsItemClassName: string
 }
@@ -82,7 +82,7 @@ export const useVFgGhostSelector = ({
       const collided =
         ghostSelectEl.value && doCheckItemCollide(ghostSelectEl.value, item)
 
-      const itemId = allIds[index]
+      const itemId = allIds.value[index]
       if (!itemId) throw new Error('Item id is not found')
 
       const isSelected = selectedIds.value.has(itemId)
