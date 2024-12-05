@@ -24,7 +24,9 @@ import type { VFgFileUploaderProvides } from '@/types/types'
 import { provide, ref } from 'vue'
 
 const emits = defineEmits<{
-  droppedFiles: [{ files: DataTransferItem[]; folders: DataTransferItem[] }]
+  droppedFiles: [
+    { files: FileSystemFileEntry[]; folders: FileSystemDirectoryEntry[] },
+  ]
 }>()
 
 const showDropUploadBoard = ref(false)
@@ -64,18 +66,20 @@ function emitFiles(event: DragEvent) {
 
   if (!event.dataTransfer?.items) return
 
-  const files: DataTransferItem[] = []
-  const folders: DataTransferItem[] = []
+  const files: FileSystemFileEntry[] = []
+  const folders: FileSystemDirectoryEntry[] = []
 
   Array.from(event.dataTransfer.items).forEach(item => {
-    if (item.webkitGetAsEntry()?.isFile) {
-      files.push(item)
-    } else if (item.webkitGetAsEntry()?.isDirectory) {
-      folders.push(item)
+    const entry = item.webkitGetAsEntry()
+    if (!entry) throw new Error('Failed to get entry')
+
+    if (entry.isFile) {
+      files.push(entry as FileSystemFileEntry)
+    } else if (entry.isDirectory) {
+      folders.push(entry as FileSystemDirectoryEntry)
     }
   })
 
-  // TODO: Emit {files: File[], entries: File[]}
   emits('droppedFiles', { files, folders })
 
   setUploadBoard(false)

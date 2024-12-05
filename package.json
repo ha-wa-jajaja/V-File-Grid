@@ -1,6 +1,6 @@
 {
   "name": "v-file-grid",
-  "version": "0.0.612",
+  "version": "0.0.613",
   "type": "module",
   "files": [
     "dist"
