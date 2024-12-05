@@ -12,7 +12,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'VFileSystem',
+      name: 'VFileGrid',
       fileName: format => `v-file-grid.${format}.js`,
     },
     rollupOptions: {

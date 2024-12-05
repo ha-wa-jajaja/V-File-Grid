@@ -1,6 +1,6 @@
 {
   "name": "v-file-grid",
-  "version": "0.0.609",
+  "version": "0.0.61",
   "type": "module",
   "files": [
     "dist"
@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/src/index.d.ts",
       "import": "./dist/v-file-grid.es.js",
       "require": "./dist/v-file-grid.umd.js"
     },
