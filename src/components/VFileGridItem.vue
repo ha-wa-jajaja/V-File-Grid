@@ -11,9 +11,13 @@ const props = defineProps<{
   id: string
   scrollerY: number
 }>()
+const computedScrollerY = computed(() => props.scrollerY)
 
-const emits = defineEmits(['onItemDragStateChange'])
+const emits = defineEmits<{
+  onItemDragStateChange: [status: boolean]
+}>()
 
+// PROVIDE: VFgContainerProvides
 const selectionInjection = inject<VFgContainerProvides>('selection')
 if (!selectionInjection) {
   console.error('Injection for "selection" not found')
@@ -22,12 +26,13 @@ if (!selectionInjection) {
 const { selectedIds, multiItemsBoard, updateSelectedIds, updateScrollerY } =
   selectionInjection
 
+// PROVIDE: VFgFileUploaderProvides
+let internalDragSetter = null
 const fileUploaderInjection = inject<VFgFileUploaderProvides>('uploader')
-if (!fileUploaderInjection) {
-  console.error('Injection for "uploader" not found')
-  throw new Error('Injection not found')
+if (fileUploaderInjection) {
+  const { setInternalDragStatus } = fileUploaderInjection
+  internalDragSetter = setInternalDragStatus
 }
-const { setInternalDragStatus } = fileUploaderInjection
 
 const isSelected = computed(() => !!selectedIds.value?.has(props.id))
 const selectedItemsCount = computed(() => selectedIds.value?.size ?? 0)
@@ -39,19 +44,16 @@ const { onVFgItemMouseDown, onVFgItemClick } = useVFgItemClickChain({
 })
 
 const { isDragging, onDragStart, onDragMove, onDragEnd } = useVFgItemDragChain({
-  itemId: props.id,
   selectedItemsCount,
-  scrollerY: props.scrollerY,
+  scrollerY: computedScrollerY,
   scrollerYSetter: updateScrollerY,
   multiSelectionBackboard: multiItemsBoard,
-  setInternalDragStatus,
+  internalDragSetter,
 })
 
 watch(isDragging, v => {
   emits('onItemDragStateChange', v)
 })
-
-// TODO: Should add a drop action here? Or another component?
 </script>
 
 <template>

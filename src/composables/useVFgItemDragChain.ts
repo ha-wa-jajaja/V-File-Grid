@@ -1,22 +1,20 @@
 import { useWindowSize } from '@vueuse/core'
 import { ref } from 'vue'
-import type { Ref } from 'vue'
+import type { Ref, ComputedRef } from 'vue'
 
 type UseVFgItemDragChainProps = {
-  itemId: string
   selectedItemsCount: Ref<number>
-  scrollerY: number
+  scrollerY: ComputedRef<number>
   scrollerYSetter: (val: number) => void
-  setInternalDragStatus: (bool: boolean) => void
+  internalDragSetter: ((bool: boolean) => void) | null
   multiSelectionBackboard: Ref<HTMLElement | null>
 }
 
 export const useVFgItemDragChain = ({
-  itemId,
   selectedItemsCount,
   scrollerY,
   scrollerYSetter,
-  setInternalDragStatus,
+  internalDragSetter,
   multiSelectionBackboard,
 }: UseVFgItemDragChainProps) => {
   const { height: windowH } = useWindowSize()
@@ -29,13 +27,11 @@ export const useVFgItemDragChain = ({
     event.stopImmediatePropagation()
 
     isDragging.value = true
-    setInternalDragStatus(true)
+    if (internalDragSetter) internalDragSetter(true)
 
     if (multiSelectionBackboard.value && selectedItemsCount.value > 1) {
       event.dataTransfer?.setDragImage(multiSelectionBackboard.value, 50, 50)
     }
-
-    event?.dataTransfer?.setData('itemId', itemId)
   }
 
   function onDragMove(e: MouseEvent) {
@@ -44,7 +40,7 @@ export const useVFgItemDragChain = ({
     if (e.clientY < windowH.value * 0.2) {
       if (moveDragInterval) return
       moveDragInterval = setInterval(() => {
-        if (scrollerY > 20) scrollerYSetter(scrollerY - 20)
+        if (scrollerY.value > 20) scrollerYSetter(scrollerY.value - 20)
       }, 80) as unknown as number
     } else {
       if (!moveDragInterval) return
@@ -55,7 +51,7 @@ export const useVFgItemDragChain = ({
 
   function onDragEnd() {
     isDragging.value = false
-    setInternalDragStatus(false)
+    if (internalDragSetter) internalDragSetter(false)
 
     if (moveDragInterval) {
       clearInterval(moveDragInterval)
