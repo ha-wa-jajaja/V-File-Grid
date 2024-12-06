@@ -13,10 +13,12 @@ const props = withDefaults(
     containerClassName?: string
     cols?: number
     gap?: string | number
+    padding?: string
   }>(),
   {
     cols: 6,
     gap: 24,
+    padding: '40px',
   },
 )
 
@@ -97,6 +99,9 @@ onMounted(() => {
   <section
     class="v-file-grid-container"
     :class="props.containerClassName"
+    :style="{
+      '--vfg-container-padding': props.padding,
+    }"
     @mousedown="toggleVFgGhostSelect(true, $event)"
     @mouseup="toggleVFgGhostSelect(false, $event)"
     @mousemove="
@@ -143,6 +148,7 @@ onMounted(() => {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+  padding: var(--vfg-container-padding);
 }
 
 .v-file-grid-container__ghost-selector {
