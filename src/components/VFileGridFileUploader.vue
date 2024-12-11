@@ -23,6 +23,10 @@
 import type { VFgFileUploaderProvides } from '@/types/types'
 import { provide, ref } from 'vue'
 
+const props = defineProps<{
+  disableUpload?: boolean
+}>()
+
 const emits = defineEmits<{
   droppedFiles: [
     { files: FileSystemFileEntry[]; folders: FileSystemDirectoryEntry[] },
@@ -44,7 +48,7 @@ function setInternalDragStatus(bool: boolean) {
 function overAction(event: Event, bool: boolean) {
   event.preventDefault()
   event.stopImmediatePropagation()
-  if (isInternalDragging.value) return
+  if (isInternalDragging.value || props.disableUpload) return
 
   if (bool) {
     ableToClose = false
@@ -64,7 +68,7 @@ function emitFiles(event: DragEvent) {
   event.preventDefault()
   event.stopImmediatePropagation()
 
-  if (!event.dataTransfer?.items) return
+  if (!event.dataTransfer?.items || props.disableUpload) return
 
   const files: FileSystemFileEntry[] = []
   const folders: FileSystemDirectoryEntry[] = []
