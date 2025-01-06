@@ -54,7 +54,10 @@ function overAction(event: Event, bool: boolean) {
     ableToClose = false
     setUploadBoard(true)
   } else {
-    if (!ableToClose) return (ableToClose = true)
+    if (!ableToClose) {
+      ableToClose = true
+      return
+    }
     setUploadBoard(false)
   }
 }

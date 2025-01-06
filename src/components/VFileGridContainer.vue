@@ -48,7 +48,7 @@ provide<VFgContainerProvides>('selection', {
 const vFsGhostSelEl = ref<HTMLElement | null>(null)
 
 const {
-  isDoingVfsGhostSelect,
+  isDoingVfgGhostSelect,
   displayVFgGhostSelect,
   vFsGhostSelectDim,
   endVfsGhostSelect,
@@ -74,7 +74,7 @@ function setVfsClearClickAction() {
   window.addEventListener('click', e => {
     e.stopPropagation()
 
-    if (isDoingVfsGhostSelect.value && displayVFgGhostSelect.value) {
+    if (isDoingVfgGhostSelect.value && displayVFgGhostSelect.value) {
       endVfsGhostSelect()
       return
     }

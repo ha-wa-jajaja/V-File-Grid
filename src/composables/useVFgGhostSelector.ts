@@ -15,7 +15,7 @@ export const useVFgGhostSelector = ({
   ghostSelectEl,
   vFsItemClassName,
 }: useVFgGhostSelectorProps) => {
-  const isDoingVfsGhostSelect = ref(false)
+  const isDoingVfgGhostSelect = ref(false)
   const displayVFgGhostSelect = ref(false)
   const ghostSelectInitX = ref(0)
   const ghostSelectInitY = ref(0)
@@ -26,15 +26,15 @@ export const useVFgGhostSelector = ({
 
   function toggleVFgGhostSelect(enable: boolean, e: MouseEvent) {
     if (enable) {
-      isDoingVfsGhostSelect.value = true
+      isDoingVfgGhostSelect.value = true
 
       ghostSelectInitX.value = e.clientX
       ghostSelectInitY.value = e.clientY
       ghostSelectPosX.value = e.clientX
       ghostSelectPosY.value = e.clientY
     } else {
-      if (isDoingVfsGhostSelect.value && !displayVFgGhostSelect.value)
-        isDoingVfsGhostSelect.value = false
+      if (isDoingVfgGhostSelect.value && !displayVFgGhostSelect.value)
+        isDoingVfgGhostSelect.value = false
       ghostSelectPosX.value = 0
       ghostSelectPosY.value = 0
       ghostSelectWidth.value = 0
@@ -43,7 +43,7 @@ export const useVFgGhostSelector = ({
   }
 
   function endVfsGhostSelect() {
-    isDoingVfsGhostSelect.value = false
+    isDoingVfgGhostSelect.value = false
     displayVFgGhostSelect.value = false
   }
 
@@ -55,7 +55,7 @@ export const useVFgGhostSelector = ({
     width: number,
     height: number,
   ) {
-    if (!isDoingVfsGhostSelect.value) return
+    if (!isDoingVfgGhostSelect.value) return
 
     displayVFgGhostSelect.value = true
 
@@ -117,20 +117,27 @@ export const useVFgGhostSelector = ({
     }
 
     function doCheckItemCollide(selector: HTMLElement, item: Element) {
-      const aTop = getElOffset(selector)?.top
-      const aLeft = getElOffset(selector)?.left
-      const bTop = getElOffset(item)?.top
-      const bLeft = getElOffset(item)?.left
+      const selectorTop = getElOffset(selector)?.top
+      const selectorLeft = getElOffset(selector)?.left
+      const itemTop = getElOffset(item)?.top
+      const itemLeft = getElOffset(item)?.left
 
       const itemDim = getElDim(item)
       const selectorDim = getElDim(selector)
-      if (!itemDim || !selectorDim || !aTop || !aLeft || !bTop || !bLeft)
+      if (
+        !itemDim ||
+        !selectorDim ||
+        !selectorTop ||
+        !selectorLeft ||
+        !itemTop ||
+        !itemLeft
+      )
         return false
       return !(
-        aTop + selectorDim.height < bTop ||
-        aTop > bTop + itemDim.height ||
-        aLeft + selectorDim.width < bLeft ||
-        aLeft > bLeft + itemDim.width
+        selectorTop + selectorDim.height < itemTop ||
+        selectorTop > itemTop + itemDim.height ||
+        selectorLeft + selectorDim.width < itemLeft ||
+        selectorLeft > itemLeft + itemDim.width
       )
     }
 
@@ -138,7 +145,7 @@ export const useVFgGhostSelector = ({
   }
 
   return {
-    isDoingVfsGhostSelect,
+    isDoingVfgGhostSelect,
     displayVFgGhostSelect,
     endVfsGhostSelect,
     vFsGhostSelectDim: {
