@@ -1,9 +1,9 @@
 import type { SelectedIdsModel } from '@/types/types'
-import type { ComputedRef } from 'vue'
+import type { Ref } from 'vue'
 
 export const useVFgSelection = (
   selectedIdModel: SelectedIdsModel,
-  allIds: ComputedRef<Array<string | number>>,
+  allIds: Ref<Array<string | number>>,
 ) => {
   function updateSelectedIdModel(
     action: 'clear' | 'select' | 'delete' | 'append' | 'add-multi',

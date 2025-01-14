@@ -5,13 +5,14 @@ import type {
 } from '@/types/types'
 import { useVFgItemClickChain } from '@/composables/useVFgItemClickChain'
 import { useVFgItemDragChain } from '@/composables/useVFgItemDragChain'
-import { defineProps, inject, computed, watch } from 'vue'
+import { defineProps, inject, computed, watch, toRef } from 'vue'
 
 const props = defineProps<{
   id: string
   scrollerY: number
 }>()
-const computedScrollerY = computed(() => props.scrollerY)
+
+const scrollerY = toRef(props, 'scrollerY')
 
 const emits = defineEmits<{
   onItemDragStateChange: [status: boolean]
@@ -45,7 +46,7 @@ const { onVFgItemMouseDown, onVFgItemClick } = useVFgItemClickChain({
 
 const { isDragging, onDragStart, onDragMove, onDragEnd } = useVFgItemDragChain({
   selectedItemsCount,
-  scrollerY: computedScrollerY,
+  scrollerY,
   scrollerYSetter: updateScrollerY,
   multiSelectionBackboard: multiItemsBoard,
   internalDragSetter,

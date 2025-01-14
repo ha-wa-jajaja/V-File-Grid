@@ -1,10 +1,10 @@
 import { useWindowSize } from '@vueuse/core'
 import { ref } from 'vue'
-import type { Ref, ComputedRef } from 'vue'
+import type { Ref } from 'vue'
 
 type UseVFgItemDragChainProps = {
   selectedItemsCount: Ref<number>
-  scrollerY: ComputedRef<number>
+  scrollerY: Ref<number>
   scrollerYSetter: (val: number) => void
   internalDragSetter: ((bool: boolean) => void) | null
   multiSelectionBackboard: Ref<HTMLElement | null>

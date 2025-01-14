@@ -1,10 +1,10 @@
 import { ref } from 'vue'
-import type { Ref, ComputedRef } from 'vue'
+import type { Ref } from 'vue'
 import type { SelectedIdsModel } from '@/types/types'
 
 export type useVFgGhostSelectorProps = {
   selectedIds: SelectedIdsModel
-  allIds: ComputedRef<Array<string | number>>
+  allIds: Ref<Array<string | number>>
   ghostSelectEl: Ref<HTMLElement | null>
   vFsItemClassName: string
 }

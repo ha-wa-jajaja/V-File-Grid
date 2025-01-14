@@ -1,6 +1,6 @@
 <!-- https://vuejs.org/guide/components/slots.html#scoped-slots -->
 <script setup lang="ts">
-import { computed, onMounted, provide, ref, defineModel } from 'vue'
+import { computed, onMounted, provide, ref, defineModel, toRef } from 'vue'
 import type { VFgContainerProvides } from '@/types/types'
 import { useVFgSelection } from '@/composables/useVFgSelection'
 import { useVFgGhostSelector } from '@/composables/useVFgGhostSelector'
@@ -22,7 +22,7 @@ const props = withDefaults(
   },
 )
 
-const computedIds = computed(() => props.allIds)
+const allIds = toRef(props, 'allIds')
 
 const gapValue = computed(() => {
   if (typeof props.gap === 'number') return `${props.gap}px`
@@ -35,7 +35,7 @@ const multiItemsBoard = ref<HTMLElement | null>(null)
 
 const selectedIdModel = defineModel<Set<string>>()
 
-const { updateSelectedIdModel } = useVFgSelection(selectedIdModel, computedIds)
+const { updateSelectedIdModel } = useVFgSelection(selectedIdModel, allIds)
 provide<VFgContainerProvides>('selection', {
   selectedIds: selectedIdModel,
   updateSelectedIds: updateSelectedIdModel,
@@ -56,7 +56,7 @@ const {
   updateVFgGhostSelectFrame,
 } = useVFgGhostSelector({
   selectedIds: selectedIdModel,
-  allIds: computedIds,
+  allIds,
   ghostSelectEl: vFsGhostSelEl,
   vFsItemClassName: props.itemClassName,
 })
