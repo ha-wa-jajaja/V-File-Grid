@@ -10,6 +10,10 @@ type UseVFgItemDragChainProps = {
   multiSelectionBackboard: Ref<HTMLElement | null>
 }
 
+// Purpose:
+// item drag > on top, scroll
+// when drag item inside, will show upload board, so use internalDragSetter to prevent showing
+
 export const useVFgItemDragChain = ({
   selectedItemsCount,
   scrollerY,
