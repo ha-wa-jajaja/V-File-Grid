@@ -1,47 +1,113 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import VFileGridFileUploader from './components/VFileGridFileUploader.vue'
+import VFileGridContainer from './components/VFileGridContainer.vue'
+import VFileGridItem from './components/VFileGridItem.vue'
+import { ref, onMounted, nextTick } from 'vue'
+
+const allIds = ref<string[]>([])
+
+const selectedIds = ref(new Set<string>())
+
+function testDrop(files: File[]) {
+  console.log(files)
+}
+
+onMounted(async () => {
+  await nextTick()
+  setTimeout(() => {
+    allIds.value = [
+      'a',
+      'b',
+      'c',
+      'd',
+      'e',
+      'f',
+      'g',
+      'h',
+      'i',
+      'j',
+      'k',
+      'l',
+      'm',
+      'n',
+      'o',
+      'p',
+      'q',
+      'r',
+      's',
+      't',
+      'u',
+      'v',
+      'w',
+      'x',
+      'y',
+      'z',
+    ]
+  }, 1000)
+})
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="test">
+    <VFileGridFileUploader :accept-files="'.jpg'" @dropped-files="testDrop">
+      <template #board>test</template>
+      <template #content>
+        <VFileGridContainer
+          v-model="selectedIds"
+          :all-ids="allIds"
+          :item-class-name="'test-item'"
+          :ghost-selector-bg="'#FF0000'"
+        >
+          <template #items>
+            <VFileGridItem
+              v-for="id in allIds"
+              :key="id"
+              :id="id"
+              :scroller-y="0"
+              v-slot="slotProps"
+            >
+              <div
+                class="test-item"
+                :class="{ selected: slotProps.isSelected }"
+              >
+                {{ id }}
+              </div>
+            </VFileGridItem>
+          </template>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+          <template #multiItemsBoard>
+            <div class="multi-board">{{ selectedIds.size }}</div>
+          </template>
+        </VFileGridContainer>
+      </template>
+    </VFileGridFileUploader>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.test {
+  width: 100%;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.test-item {
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: azure;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.test-item.selected {
+  background-color: lightcoral;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.multi-board {
+  background-color: greenyellow;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 80px;
 }
 </style>

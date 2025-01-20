@@ -1,20 +1,45 @@
 {
-  "name": "v-file-system",
-  "version": "0.0.0",
-  "private": true,
+  "name": "v-file-grid",
+  "version": "0.0.67",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/v-file-grid.umd.js",
+  "module": "./dist/v-file-grid.es.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/v-file-grid.es.js",
+      "require": "./dist/v-file-grid.umd.js",
+      "types": "./dist/src/index.d.ts"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ha-wa-jajaja/v-file-system"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "vite build && vue-tsc --emitDeclarationOnly && mv dist/src dist/types",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "format": "prettier -write src/"
   },
   "dependencies": {
-    "vue": "^3.5.12"
+    "vue": "^3.4.21"
+  },
+  "peerDependencies": {
+    "@vueuse/core": "^10.9.0"
+  },
+  "peerDependencyRules": {
+    "ignoreMissing": [
+      "@vueuse/core"
+    ]
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
@@ -32,8 +57,10 @@
     "jsdom": "^25.0.1",
     "npm-run-all2": "^7.0.1",
     "prettier": "^3.3.3",
+    "sass-embedded": "^1.81.1",
     "typescript": "~5.6.0",
     "vite": "^5.4.10",
+    "vite-plugin-css-injected-by-js": "^3.5.2",
     "vite-plugin-vue-devtools": "^7.5.3",
     "vitest": "^2.1.3",
     "vue-tsc": "^2.1.6"
