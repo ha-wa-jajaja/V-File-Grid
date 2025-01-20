@@ -1,24 +1,3 @@
-<template>
-  <div
-    class="v-file-grid__uploader"
-    @dragover.prevent
-    @dragenter="overAction($event, true)"
-    @dragleave="overAction($event, false)"
-    @drop="emitFiles($event)"
-  >
-    <div v-show="showDropUploadBoard" class="v-file-grid__uploader-board">
-      <slot name="board"></slot>
-    </div>
-
-    <div
-      class="v-file-grid__uploader-content"
-      :class="{ hide: showDropUploadBoard }"
-    >
-      <slot name="content"></slot>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import type { VFgFileUploaderProvides } from '@/types/types'
 import { provide, ref } from 'vue'
@@ -92,6 +71,27 @@ function emitFiles(event: DragEvent) {
   setUploadBoard(false)
 }
 </script>
+
+<template>
+  <div
+    class="v-file-grid__uploader"
+    @dragover.prevent
+    @dragenter="overAction($event, true)"
+    @dragleave="overAction($event, false)"
+    @drop="emitFiles($event)"
+  >
+    <div v-show="showDropUploadBoard" class="v-file-grid__uploader-board">
+      <slot name="board"></slot>
+    </div>
+
+    <div
+      class="v-file-grid__uploader-content"
+      :class="{ hide: showDropUploadBoard }"
+    >
+      <slot name="content"></slot>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .v-file-grid__uploader {
