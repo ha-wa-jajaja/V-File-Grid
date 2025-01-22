@@ -8,6 +8,8 @@ const allIds = ref<string[]>([])
 
 const selectedIds = ref(new Set<string>())
 
+const wrapper = ref<HTMLElement | null>(null)
+
 function testDrop(files: File[]) {
   console.log(files)
 }
@@ -48,7 +50,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="test">
+  <div class="test" ref="wrapper">
     <VFileGridFileUploader :accept-files="'.jpg'" @dropped-files="testDrop">
       <template #board>test</template>
       <template #content>
@@ -63,7 +65,6 @@ onMounted(async () => {
               v-for="id in allIds"
               :key="id"
               :id="id"
-              :scroller-y="0"
               v-slot="slotProps"
             >
               <div
@@ -87,6 +88,9 @@ onMounted(async () => {
 <style scoped>
 .test {
   width: 100%;
+  /* height: 50vh;
+  overflow: scroll;
+  margin-top: 50vh; */
 }
 
 .test-item {

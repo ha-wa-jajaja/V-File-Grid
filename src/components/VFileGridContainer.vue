@@ -1,7 +1,11 @@
 <!-- https://vuejs.org/guide/components/slots.html#scoped-slots -->
 <script setup lang="ts">
 import { computed, onMounted, provide, ref, defineModel, toRef } from 'vue'
-import type { VFgContainerProvides } from '@/types/types'
+import type {
+  VFgContainerProvides,
+  VFgAutoScrollEl,
+  VFgAutoScrollConfig,
+} from '@/types/types'
 import { useVFgSelection } from '@/composables/useVFgSelection'
 import { useVFgGhostSelector } from '@/composables/useVFgGhostSelector'
 
@@ -11,6 +15,8 @@ const props = withDefaults(
     itemClassName: string
     ghostSelectorBg: string
     containerClassName?: string
+    scroller?: VFgAutoScrollEl
+    scrollerConfig?: VFgAutoScrollConfig
     cols?: number
     gap?: string | number
     padding?: string
@@ -19,30 +25,32 @@ const props = withDefaults(
     cols: 6,
     gap: 24,
     padding: '40px',
+    scroller: 'window',
+    scrollerConfig: {
+      scrollSpeed: 5,
+      scrollThreshold: 0.2,
+    },
   },
 )
-
 const allIds = toRef(props, 'allIds')
+const scroller = toRef(props, 'scroller')
 
 const gapValue = computed(() => {
   if (typeof props.gap === 'number') return `${props.gap}px`
   return props.gap
 })
 
-const emits = defineEmits(['updateScrollerY'])
-
 const multiItemsBoard = ref<HTMLElement | null>(null)
 
 const selectedIdModel = defineModel<Set<string>>()
 
 const { updateSelectedIdModel } = useVFgSelection(selectedIdModel, allIds)
-provide<VFgContainerProvides>('selection', {
+provide<VFgContainerProvides>('container', {
   selectedIds: selectedIdModel,
   updateSelectedIds: updateSelectedIdModel,
   multiItemsBoard,
-  updateScrollerY: (val: number) => {
-    emits('updateScrollerY', val)
-  },
+  scroller,
+  scrollConfig: props.scrollerConfig,
 })
 
 const vFsGhostSelEl = ref<HTMLElement | null>(null)
