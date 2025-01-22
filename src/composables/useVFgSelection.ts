@@ -9,49 +9,67 @@ export const useVFgSelection = (
     action: 'clear' | 'select' | 'delete' | 'append' | 'add-multi',
     id?: string,
   ) {
-    if (!selectedIdModel.value) {
-      throw new Error('SelectedIdsModel is not defined')
+    if (!selectedIdModel.value)
+      throw new Error('SelectedIdsModel is not invalid')
+
+    if (action === 'clear') {
+      selectedIdModel.value.clear()
+      return
     }
-    if (action === 'clear') selectedIdModel.value.clear()
-    else {
-      if (!id) throw new Error('Missing ID')
-      if (action === 'append') {
-        selectedIdModel.value.add(id)
-        return
-      }
-      if (action === 'add-multi') {
-        const selectedItemIndexes = Array.from(selectedIdModel.value).map(id =>
-          allIds.value.findIndex(i => i === id),
-        )
-        const currItemIdx = allIds.value.findIndex(i => i === id)
-        const firstItemIdx = Math.min(...selectedItemIndexes)
-        const lastItemIdx = Math.max(...selectedItemIndexes)
 
-        if ([firstItemIdx, lastItemIdx, currItemIdx].some(n => n < 0))
-          throw new Error('Id not found in id list')
+    if (!id) throw new Error('Missing ID for action ' + action)
 
-        let itemsToAdd
-
-        if (currItemIdx < firstItemIdx) {
-          itemsToAdd = allIds.value.slice(currItemIdx, lastItemIdx)
-        } else {
-          const startIdx =
-            currItemIdx < lastItemIdx ? currItemIdx : lastItemIdx + 1
-          const endIdx =
-            currItemIdx < lastItemIdx ? lastItemIdx : currItemIdx + 1
-
-          itemsToAdd = allIds.value.slice(startIdx, endIdx)
-        }
-        itemsToAdd.forEach(i => selectedIdModel.value?.add(i))
-      }
-      if (action === 'select') {
-        selectedIdModel.value.clear()
-        selectedIdModel.value.add(id)
-      }
-      if (action === 'delete') {
-        if (selectedIdModel.value.has(id)) selectedIdModel.value.delete(id)
-      }
+    if (action === 'append') {
+      selectedIdModel.value.add(id)
+      return
     }
+
+    if (action === 'add-multi') {
+      handleMultiSelection(selectedIdModel.value, id)
+    }
+
+    if (action === 'select') {
+      selectedIdModel.value.clear()
+      selectedIdModel.value.add(id)
+    }
+
+    if (action === 'delete') {
+      if (selectedIdModel.value.has(id)) selectedIdModel.value.delete(id)
+    }
+  }
+
+  function handleMultiSelection(
+    selectedIds: Set<string | number>,
+    targetId: string | number,
+  ) {
+    const selectedItemIndexes: number[] = []
+    let targetIdIdx = -1
+    let firstItemIdx = Infinity
+    let lastItemIdx = -1
+
+    allIds.value.forEach((id, idx) => {
+      if (selectedIds.has(id)) {
+        selectedItemIndexes.push(idx)
+        firstItemIdx = Math.min(firstItemIdx, idx)
+        lastItemIdx = Math.max(lastItemIdx, idx)
+      }
+      if (id === targetId) targetIdIdx = idx
+    })
+
+    if ([firstItemIdx, lastItemIdx, targetIdIdx].some(n => n < 0))
+      throw new Error('Selected list has mismatch with allIds list')
+
+    let itemsToAdd
+    if (targetIdIdx < firstItemIdx) {
+      itemsToAdd = allIds.value.slice(targetIdIdx, lastItemIdx)
+    } else {
+      const startIdx = targetIdIdx < lastItemIdx ? targetIdIdx : lastItemIdx + 1
+      const endIdx = targetIdIdx < lastItemIdx ? lastItemIdx : targetIdIdx + 1
+
+      itemsToAdd = allIds.value.slice(startIdx, endIdx)
+    }
+
+    itemsToAdd.forEach(i => selectedIdModel.value?.add(i))
   }
 
   return { updateSelectedIdModel }
