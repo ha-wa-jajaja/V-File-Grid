@@ -5,27 +5,29 @@ import type {
 } from '@/types/types'
 import { useVFgItemClickChain } from '@/composables/useVFgItemClickChain'
 import { useVFgItemDragChain } from '@/composables/useVFgItemDragChain'
-import { defineProps, inject, computed, watch, toRef } from 'vue'
+import { defineProps, inject, computed, watch } from 'vue'
 
 const props = defineProps<{
   id: string
-  scrollerY: number
 }>()
-
-const scrollerY = toRef(props, 'scrollerY')
 
 const emits = defineEmits<{
   onItemDragStateChange: [status: boolean]
 }>()
 
 // PROVIDE: VFgContainerProvides
-const selectionInjection = inject<VFgContainerProvides>('selection')
-if (!selectionInjection) {
+const containerInjection = inject<VFgContainerProvides>('container')
+if (!containerInjection) {
   console.error('Injection for "selection" not found')
   throw new Error('Injection not found')
 }
-const { selectedIds, multiItemsBoard, updateSelectedIds, updateScrollerY } =
-  selectionInjection
+const {
+  selectedIds,
+  multiItemsBoard,
+  updateSelectedIds,
+  scroller,
+  scrollConfig,
+} = containerInjection
 
 // PROVIDE: VFgFileUploaderProvides
 let internalDragSetter = null
@@ -46,10 +48,10 @@ const { onVFgItemMouseDown, onVFgItemClick } = useVFgItemClickChain({
 
 const { isDragging, onDragStart, onDragMove, onDragEnd } = useVFgItemDragChain({
   selectedItemsCount,
-  scrollerY,
-  scrollerYSetter: updateScrollerY,
   multiSelectionBackboard: multiItemsBoard,
   internalDragSetter,
+  scroller,
+  scrollConfig,
 })
 
 watch(isDragging, v => {
