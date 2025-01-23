@@ -26,10 +26,10 @@ const props = withDefaults(
     gap: 24,
     padding: '40px',
     scroller: 'window',
-    scrollerConfig: {
+    scrollerConfig: () => ({
       scrollSpeed: 5,
       scrollThreshold: 0.2,
-    },
+    }),
   },
 )
 const allIds = toRef(props, 'allIds')
