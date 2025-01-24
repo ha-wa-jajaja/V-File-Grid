@@ -1,6 +1,17 @@
 {
   "name": "v-file-grid",
-  "version": "0.0.685",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ha-wa-jajaja/V-File-Grid.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ha-wa-jajaja/V-File-Grid/issues"
+  },
+  "homepage": "https://github.com/ha-wa-jajaja/V-File-Grid#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "version": "0.0.686",
   "description": "A Google-Drive-Behavior inspired file grid component for Vue 3.",
   "type": "module",
   "files": [
@@ -16,10 +27,6 @@
       "types": "./dist/src/index.d.ts"
     },
     "./style.css": "./dist/style.css"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ha-wa-jajaja/V-File-Grid"
   },
   "license": "MIT",
   "scripts": {
