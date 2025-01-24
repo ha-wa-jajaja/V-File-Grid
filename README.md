@@ -29,7 +29,7 @@ npm i v-file-grid
 
 ## Demo
 
-- **TODO**
+[StackBlitz](https://stackblitz.com/edit/vitejs-vite-suohd4ox?file=src%2FApp.vue)
 
 ## Components
 
