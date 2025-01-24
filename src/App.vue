@@ -10,10 +10,6 @@ const selectedIds = ref(new Set<string>())
 
 const wrapper = ref<HTMLElement | null>(null)
 
-function testDrop(files: File[]) {
-  console.log(files)
-}
-
 onMounted(async () => {
   await nextTick()
   setTimeout(() => {
@@ -51,7 +47,7 @@ onMounted(async () => {
 
 <template>
   <div class="test" ref="wrapper">
-    <VFileGridFileUploader :accept-files="'.jpg'" @dropped-files="testDrop">
+    <VFileGridFileUploader :accept-files="'.jpg'">
       <template #board>test</template>
       <template #content>
         <VFileGridContainer
